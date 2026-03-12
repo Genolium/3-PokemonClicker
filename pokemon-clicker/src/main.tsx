@@ -5,11 +5,12 @@ import { ConfigProvider } from 'antd'
 import { pokemonTheme } from './theme/themeConfig';
 import { SignIn } from './pages/SignIn'
 import { SignUp } from './pages/SignUp'
+import { MainPage } from './pages/MainPage'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/auth/sign-up" replace />,
+    element: <MainPage />,
   },
   {
     path: "/auth/sign-in",

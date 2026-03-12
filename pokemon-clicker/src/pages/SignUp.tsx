@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, Input, Form } from 'antd';
 import { AuthLayout } from '../components/AuthLayout/AuthLayout';
+import { useNavigate } from 'react-router-dom';
 
 const signUpSchema = z.object({
     email: z.string()
@@ -18,10 +19,13 @@ const signUpSchema = z.object({
     path: ["passwordConfirm"],
 });
 
+
 // Вытаскиваем типы из схемы для TypeScript
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export const SignUp = () => {
+    const navigate = useNavigate();
+
     // Инициализируем форму
     const { control, handleSubmit, formState: { errors } } = useForm<SignUpFormValues>({
         resolver: zodResolver(signUpSchema), // Подключаем Zod
@@ -33,9 +37,37 @@ export const SignUp = () => {
     });
 
     // Функция отправки
-    const onSubmit = (data: SignUpFormValues) => {
+    const onSubmit = async (data: SignUpFormValues) => {
         console.log('Данные формы валидны!', data);
-        // Тут в будущем будет запрос к API
+
+        try {
+            const requestBody = {
+                companyName: 'Acme Inc. ' + data.email,
+                userName: 'John Doe James Doakes ' + data.email,
+                email: data.email,
+                password: data.password,
+            }
+
+            const response = await fetch("https://cafe-admin-api-production.up.railway.app/auth/sign-up", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestBody),
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Ошибка регистрации. Проверьте данные')
+            }
+
+            console.log('Пользователь успешно зарегистрирован')
+            navigate('/auth/sign-in')
+
+        } catch (error: any) {
+            console.error(error);
+            alert(error.message);
+        }
     };
 
     return (

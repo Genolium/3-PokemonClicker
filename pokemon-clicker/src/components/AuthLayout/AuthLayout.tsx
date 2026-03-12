@@ -18,7 +18,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
                 <img src="/logo/united.png" alt="Pokemon Clicker" className={styles.logo} />
             </div>
 
-            <Card className={styles.card} bordered={false}>
+            <Card className={styles.card}>
                 <Tabs
                     activeKey={activeKey}
                     centered

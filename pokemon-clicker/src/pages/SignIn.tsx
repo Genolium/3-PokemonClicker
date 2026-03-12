@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, Input, Form } from 'antd';
 import { AuthLayout } from '../components/AuthLayout/AuthLayout';
+import { useNavigate } from 'react-router-dom';
 
 const signInSchema = z.object({
     email: z.string()
@@ -18,6 +19,8 @@ const signInSchema = z.object({
 type SignInFormValues = z.infer<typeof signInSchema>;
 
 export const SignIn = () => {
+    const navigate = useNavigate();
+
     // Инициализируем форму
     const { control, handleSubmit, formState: { errors } } = useForm<SignInFormValues>({
         resolver: zodResolver(signInSchema), // Подключаем Zod
@@ -28,9 +31,43 @@ export const SignIn = () => {
     });
 
     // Функция отправки
-    const onSubmit = (data: SignInFormValues) => {
-        console.log('Данные формы валидны!', data);
-        // Тут в будущем будет запрос к API
+    const onSubmit = async (data: SignInFormValues) => {
+        console.log('Данные формы валидны!');
+
+        try {
+            const requestBody = {
+                email: data.email,
+                password: data.password,
+            }
+
+            const response = await fetch("https://cafe-admin-api-production.up.railway.app/auth/sign-in", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestBody),
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Ошибка авторизации. Проверьте данные')
+            }
+
+            const responseData = await response.json();
+            const token = responseData.access_token;
+
+            if (token) {
+                localStorage.setItem('pokemon_auth_token', token);
+                localStorage.setItem('pokemon_user_email', data.email);
+                console.log('Пользователь успешно авторизован')
+                navigate('/')
+            } else {
+                throw new Error('Токен не найден в ответе сервера')
+            }
+        } catch (error: any) {
+            console.error(error);
+            alert(error.message);
+        }
     };
 
     return (
