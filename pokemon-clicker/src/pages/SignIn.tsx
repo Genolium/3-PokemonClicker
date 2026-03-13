@@ -4,6 +4,10 @@ import { z } from 'zod';
 import { Button, Input, Form } from 'antd';
 import { AuthLayout } from '../components/AuthLayout/AuthLayout';
 import { useNavigate } from 'react-router-dom';
+import { setBalance } from '../store/moneySlice';
+import { setPokemons } from '../store/pokemonThunks';
+import type { AppDispatch } from '../store/store';
+import { useDispatch } from 'react-redux';
 
 const signInSchema = z.object({
     email: z.string()
@@ -20,6 +24,7 @@ type SignInFormValues = z.infer<typeof signInSchema>;
 
 export const SignIn = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
 
     // Инициализируем форму
     const { control, handleSubmit, formState: { errors } } = useForm<SignInFormValues>({
@@ -59,6 +64,14 @@ export const SignIn = () => {
             if (token) {
                 localStorage.setItem('pokemon_auth_token', token);
                 localStorage.setItem('pokemon_user_email', data.email);
+
+                const userSave = localStorage.getItem(`save_${data.email}`);
+                if (userSave) {
+                    const parsedData = JSON.parse(userSave);
+                    dispatch(setBalance(parsedData.balance));
+                    dispatch(setPokemons(parsedData.pokemons));
+                }
+
                 console.log('Пользователь успешно авторизован')
                 navigate('/')
             } else {

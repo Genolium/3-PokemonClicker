@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { Button, Card, Spin } from "antd";
 import { Header } from "../components/Header/Header"
 import { MainLayout } from "../components/MainLayout/MainLayout"
-import { fetchRandomPokemon } from "../store/pokemonThunks";
+import { fetchRandomPokemon, setPokemons } from "../store/pokemonThunks";
+import { setBalance } from "../store/moneySlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 
@@ -9,12 +11,23 @@ export const MainPage = () => {
     const dispatch = useDispatch();
     const { items, loading } = useSelector((state: RootState) => state.pokemon);
 
+    useEffect(() => {
+        const email = localStorage.getItem('pokemon_user_email');
+        if (email) {
+            const userSave = localStorage.getItem(`save_${email}`);
+            if (userSave) {
+                const parsedData = JSON.parse(userSave);
+                dispatch(setPokemons(parsedData.pokemons));
+                dispatch(setBalance(parsedData.balance));
+            }
+        }
+    }, [dispatch]);
+
     return (
         <MainLayout>
             <Header />
 
             <div>
-                <Button type="primary" onClick={() => dispatch(fetchRandomPokemon())}>{loading ? <Spin /> : 'Get random pokemon'}</Button>
 
                 {items.map((pokemon) => (
                     <Card key={pokemon.id} title={pokemon.name} cover={<img src={pokemon.sprites.front_default} alt={pokemon.name} />} style={{ width: 300, margin: '16px' }}>

@@ -19,7 +19,9 @@ const pokemonSlice = createSlice({
         items: [] as Pokemon[],
         loading: false,
     },
-    reducers: {},
+    reducers: {
+        setPokemons: (state, action) => { state.items = action.payload; }
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchRandomPokemon.pending, (state) => {
             state.loading = true;
@@ -32,4 +34,5 @@ const pokemonSlice = createSlice({
     }
 })
 
+export const { setPokemons } = pokemonSlice.actions;
 export default pokemonSlice.reducer

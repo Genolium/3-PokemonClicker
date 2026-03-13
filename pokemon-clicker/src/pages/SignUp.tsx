@@ -4,6 +4,9 @@ import { z } from 'zod';
 import { Button, Input, Form } from 'antd';
 import { AuthLayout } from '../components/AuthLayout/AuthLayout';
 import { useNavigate } from 'react-router-dom';
+import { fetchRandomPokemon } from '../store/pokemonThunks';
+import { useDispatch } from 'react-redux';
+import type { AppDispatch } from '../store/store';
 
 const signUpSchema = z.object({
     email: z.string()
@@ -25,6 +28,7 @@ type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export const SignUp = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
 
     // Инициализируем форму
     const { control, handleSubmit, formState: { errors } } = useForm<SignUpFormValues>({
@@ -60,6 +64,15 @@ export const SignUp = () => {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Ошибка регистрации. Проверьте данные')
             }
+
+            const starterPokemon = await dispatch(fetchRandomPokemon()).unwrap();
+
+            const userSave = {
+                balance: 0,
+                pokemons: [starterPokemon],
+            }
+
+            localStorage.setItem(`save_${data.email}`, JSON.stringify(userSave));
 
             console.log('Пользователь успешно зарегистрирован')
             navigate('/auth/sign-in')
