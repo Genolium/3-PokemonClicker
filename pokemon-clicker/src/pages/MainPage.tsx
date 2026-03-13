@@ -3,13 +3,16 @@ import { Button, Card, Spin } from "antd";
 import { Header } from "../components/Header/Header"
 import { MainLayout } from "../components/MainLayout/MainLayout"
 import { fetchRandomPokemon, setPokemons } from "../store/pokemonThunks";
-import { setBalance } from "../store/moneySlice";
+import { setBalance, addMoney } from "../store/moneySlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 
 export const MainPage = () => {
     const dispatch = useDispatch();
     const { items, loading } = useSelector((state: RootState) => state.pokemon);
+
+    const pokemons = useSelector((state: RootState) => state.pokemon.items);
+    const balance = useSelector((state: RootState) => state.money.balance);
 
     useEffect(() => {
         const email = localStorage.getItem('pokemon_user_email');
@@ -22,6 +25,17 @@ export const MainPage = () => {
             }
         }
     }, [dispatch]);
+
+    useEffect(() => {
+        const incomePerSecond = pokemons.reduce((sum, pokemon) => sum + (pokemon.weight || 0), 0);
+        if (incomePerSecond === 0) return;
+
+        const intervalId = setInterval(() => {
+            dispatch(addMoney(incomePerSecond));
+        }, 2000);
+
+        return () => clearInterval(intervalId);
+    }, [pokemons, dispatch]);
 
     return (
         <MainLayout>
