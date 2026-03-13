@@ -6,11 +6,16 @@ import { pokemonTheme } from './theme/themeConfig';
 import { SignIn } from './pages/SignIn'
 import { SignUp } from './pages/SignUp'
 import { MainPage } from './pages/MainPage'
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainPage />,
+    element: (
+      <ProtectedRoute>
+        <MainPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/auth/sign-in",
