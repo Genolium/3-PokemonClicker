@@ -1,5 +1,11 @@
+import { Header } from "../components/Header/Header"
+import { MainLayout } from "../components/MainLayout/MainLayout"
+
 export const MainPage = () => {
     return (
-        <div>Main page</div>
+        <MainLayout>
+            <Header />
+            <div> Main page</ div>
+        </MainLayout>
     )
 }

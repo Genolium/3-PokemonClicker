@@ -1,0 +1,36 @@
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 0px 16px 0px #3A3A3A1A;
+    padding: 0 16px;
+    border-radius: 16px;
+    background-color: #FFFFFF;
+    height: 86px;
+}
+
+.logo {
+    height: auto;
+    max-width: 300px;
+}
+
+.coinContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+}
+
+.coin {
+    height: 32px;
+}
+
+.coinText {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFCC01;
+    -webkit-text-stroke: 4px #365FAC;
+    paint-order: stroke fill;
+    font-family: "Inter", sans-serif;
+}

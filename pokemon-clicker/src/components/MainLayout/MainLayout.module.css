@@ -1,0 +1,8 @@
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 16px;
+    gap: 20px;
+}
