@@ -8,10 +8,20 @@ export const pokemonTheme: ThemeConfig = {
         colorTextBase: '#000000',
         colorError: '#FF4D4F',
 
-        fontFamily: '"Roboto", sans-serif',
+        fontFamily: '"Inter", sans-serif',
         fontSize: 14,
 
         borderRadius: 0,
         wireframe: false,
+    },
+    components: {
+        Collapse: {
+            headerPadding: '16px 24px',
+            contentPadding: '0 24px 24px 24px',
+            colorBorder: 'transparent',
+            headerBg: '#ffffff',
+            contentBg: '#ffffff',
+            borderRadiusLG: 16,
+        }
     }
 };

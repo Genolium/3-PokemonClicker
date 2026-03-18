@@ -1,0 +1,12 @@
+.collapseContainer {
+  width: 100%;
+}
+
+.customHeader {
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFCC01;
+  -webkit-text-stroke: 4px #365FAC;
+  paint-order: stroke fill;
+  font-family: "Inter", sans-serif;
+}

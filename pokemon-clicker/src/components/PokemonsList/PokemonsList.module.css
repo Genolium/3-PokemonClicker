@@ -1,0 +1,10 @@
+.wrapper {
+    width: 100%;
+}
+
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: flex-start;
+}

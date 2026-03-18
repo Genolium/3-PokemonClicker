@@ -1,0 +1,17 @@
+.wrapper {
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    background-color: white;
+    width: 100%;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFCC01;
+    -webkit-text-stroke: 4px #365FAC;
+    paint-order: stroke fill;
+    font-family: "Inter", sans-serif;
+    margin-top: 0;
+}
