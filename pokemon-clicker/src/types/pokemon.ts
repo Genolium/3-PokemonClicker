@@ -1,7 +1,10 @@
 export interface Pokemon {
     id: number,
     name: string,
+    nickname?: string,
     weight: number,
+    totalEarned?: number,
+    caughtAt?: number,
     sprites: {
         front_default: string;
         other: {

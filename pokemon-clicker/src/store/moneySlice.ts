@@ -15,7 +15,7 @@ const moneySlice = createSlice({
         addMoney: (state, action: PayloadAction<number>) => {
             state.balance += action.payload;
         },
-        substractMoney: (state, action: PayloadAction<number>) => {
+        subtractMoney: (state, action: PayloadAction<number>) => {
             state.balance -= action.payload;
         },
         setBalance: (state, action: PayloadAction<number>) => {
@@ -24,5 +24,5 @@ const moneySlice = createSlice({
     }
 })
 
-export const { addMoney, substractMoney, setBalance } = moneySlice.actions;
+export const { addMoney, subtractMoney, setBalance } = moneySlice.actions;
 export default moneySlice.reducer;

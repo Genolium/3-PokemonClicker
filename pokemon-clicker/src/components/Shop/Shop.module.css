@@ -15,3 +15,39 @@
     font-family: "Inter", sans-serif;
     margin-top: 0;
 }
+
+.shopContainer {
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    background-color: white;
+    width: 100%;
+}
+
+.itemList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.itemCard {
+    text-align: center;
+}
+
+.itemImageWrapper {
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.itemImage {
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.itemName {
+    font-weight: bold;
+    text-transform: capitalize;
+    margin-bottom: 8px;
+}

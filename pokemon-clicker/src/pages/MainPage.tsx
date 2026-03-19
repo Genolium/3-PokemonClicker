@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Collapse } from "antd";
 import { Header } from "../components/Header/Header"
 import { MainLayout } from "../components/MainLayout/MainLayout"
-import { setPokemons } from "../store/pokemonThunks";
+import { setPokemons, tickPokemonsIncome } from "../store/pokemonThunks";
 import { setBalance, addMoney } from "../store/moneySlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store/store";
+import { setInventory } from "../store/inventorySlice";
 import { Inventory } from "../components/Inventory/Inventory";
 import { PokemonsList } from "../components/PokemonsList/PokemonsList";
 import { Garden } from "../components/Garden/Garden";
@@ -15,6 +16,10 @@ import styles from './MainPage.module.css';
 export const MainPage = () => {
     const dispatch = useDispatch();
     const pokemons = useSelector((state: RootState) => state.pokemon.items);
+    const balance = useSelector((state: RootState) => state.money.balance);
+    const inventory = useSelector((state: RootState) => state.inventory.items);
+    
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const email = localStorage.getItem('pokemon_user_email');
@@ -22,11 +27,29 @@ export const MainPage = () => {
             const userSave = localStorage.getItem(`save_${email}`);
             if (userSave) {
                 const parsedData = JSON.parse(userSave);
-                dispatch(setPokemons(parsedData.pokemons));
-                dispatch(setBalance(parsedData.balance));
+                dispatch(setPokemons(parsedData.pokemons || []));
+                dispatch(setBalance(parsedData.balance || 0));
+                if (parsedData.inventory) {
+                    dispatch(setInventory(parsedData.inventory));
+                }
             }
         }
+        
+        setIsLoaded(true);
     }, [dispatch]);
+
+    useEffect(() => {
+        if (!isLoaded) return;
+        const email = localStorage.getItem('pokemon_user_email');
+        if (email) {
+            const saveToStore = {
+                balance,
+                pokemons,
+                inventory,
+            };
+            localStorage.setItem(`save_${email}`, JSON.stringify(saveToStore));
+        }
+    }, [balance, pokemons, inventory, isLoaded]);
 
     useEffect(() => {
         const incomePerSecond = pokemons.reduce((sum, pokemon) => sum + (pokemon.weight || 0), 0);
@@ -34,7 +57,8 @@ export const MainPage = () => {
 
         const intervalId = setInterval(() => {
             dispatch(addMoney(incomePerSecond));
-        }, 2000);
+            dispatch(tickPokemonsIncome());
+        }, 1000);
 
         return () => clearInterval(intervalId);
     }, [pokemons, dispatch]);
